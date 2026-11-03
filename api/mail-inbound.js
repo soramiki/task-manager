@@ -22,6 +22,18 @@ function htmlToText(html) {
     .replace(/&#0?39;/g, "'")
 }
 
+// CloudMailin から届いた中身を読む。JSON と multipart（フォームの形）のどちらでも読めるようにする
+// 戻り値：{ plain, html }
+async function readMail(req) {
+  const type = req.headers['content-type'] ?? ''
+  if (!type.includes('multipart/form-data')) return readJsonBody(req)
+
+  const chunks = []
+  for await (const chunk of req) chunks.push(chunk)
+  const form = await new Response(Buffer.concat(chunks), { headers: { 'content-type': type } }).formData()
+  return { plain: form.get('plain') ?? '', html: form.get('html') ?? '' }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return send(res, 405, { error: 'POST で送ってください' })
 
@@ -29,8 +41,8 @@ export default async function handler(req, res) {
   if (!isValidMailKey(key)) return send(res, 401, { error: '合言葉が違います' })
 
   try {
-    const mail = await readJsonBody(req)
-    // CloudMailin の JSON：plain（文字だけの本文）、html（HTMLの本文）
+    const mail = await readMail(req)
+    // plain：文字だけの本文 / html：HTMLの本文
     const text = mail.plain || (mail.html ? htmlToText(mail.html) : '')
     const receivedAt = new Date().toISOString()
     const found = parseSubmissionMail(text).map((s) => ({ ...s, receivedAt }))
