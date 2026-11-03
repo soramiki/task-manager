@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { formatDateTime } from '../utils/date.js'
+import { SubmissionMailButton } from './SubmissionMail.jsx'
 import { parseIcs } from '../utils/ics.js'
 import { importEvents } from '../utils/importEvents.js'
 import {
@@ -14,7 +15,7 @@ const LETUS_EXPORT_URL = 'https://letus.ed.tus.ac.jp/calendar/export.php'
 
 // 「取り込み」の画面：LETUS の課題を、手で入力せずに入れる
 // 1. カレンダーURLから受け取る → 2. 何が変わるかを確認 → 3. 取り込む
-export function ImportView({ tasks, lastImport, now, onImport }) {
+export function ImportView({ tasks, lastImport, now, onImport, onCompleteTasks }) {
   const [preview, setPreview] = useState(null) // 確認中の内容
   const [error, setError] = useState('')
   const [message, setMessage] = useState('') // 取り込み後のお知らせ
@@ -135,6 +136,12 @@ export function ImportView({ tasks, lastImport, now, onImport }) {
           onCancel={() => setPreview(null)}
         />
       )}
+
+      <div className="import-card">
+        <h3 className="import-card__heading">提出したことを記録する</h3>
+        <p className="page-note">LETUSから届く「提出を送信しました」のメール（Outlook）の文を読み取って、その課題を「完了」にします。</p>
+        <SubmissionMailButton tasks={tasks} onComplete={onCompleteTasks} />
+      </div>
 
       <div className="import-help">
         <h3 className="import-help__heading">説明</h3>

@@ -3,6 +3,7 @@ import { getMissedCountBySubject } from '../utils/missedStats.js'
 import { AutoImportNotice } from './AutoImportNotice.jsx'
 import { ImportReminder } from './ImportReminder.jsx'
 import { MissedStatsButton } from './MissedStats.jsx'
+import { SubmissionMailButton } from './SubmissionMail.jsx'
 import { SUMMARY_GROUPS, summarizeTasks } from '../utils/summary.js'
 import { TaskList } from './TaskList.jsx'
 
@@ -19,6 +20,7 @@ export function HomeView({
   reminder, // 取り込みのお知らせ（出さないときは null）
   autoImportResult, // 自動で取り込んだ内容（なければ null）
   onDismissAutoImport,
+  onCompleteTasks, // 提出メールから、まとめて完了にする
 }) {
   const autoNotice = autoImportResult && (
     <AutoImportNotice result={autoImportResult} onDismiss={onDismissAutoImport} />
@@ -78,6 +80,8 @@ export function HomeView({
             </button>
           ))}
         </div>
+
+        <SubmissionMailButton tasks={tasks} onComplete={onCompleteTasks} />
 
         {hasTodo ? (
           SUMMARY_GROUPS.filter(({ key }) => groups[key].length > 0).map(({ key, label }) => (

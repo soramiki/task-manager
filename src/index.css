@@ -1107,6 +1107,73 @@ select {
   color: var(--text-sub);
 }
 
+/* 提出メールから完了にする */
+.mail-button {
+  width: 100%;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+
+.mail-paste {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.mail-results {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.mail-results__item {
+  display: flex;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.mail-results__item--ok {
+  border-color: var(--primary);
+}
+
+.mail-results__item--done,
+.mail-results__item--missing {
+  opacity: 0.7;
+}
+
+.mail-results__mark {
+  flex-shrink: 0;
+  width: 1.4em;
+  font-weight: 700;
+  text-align: center;
+  color: var(--primary);
+}
+
+.mail-results__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.mail-results__subject {
+  font-size: 0.78rem;
+  color: var(--text-sub);
+}
+
+.mail-results__title {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.mail-results__note {
+  font-size: 0.78rem;
+  color: var(--text-sub);
+}
+
 /* ホームの上の「自動で取り込みました」のお知らせ */
 .auto-import {
   margin-bottom: 12px;

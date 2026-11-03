@@ -91,6 +91,11 @@ function App() {
     recordImport()
   }
 
+  // 提出メールから読み取った課題を、まとめて「完了」にする
+  function completeTasks(ids) {
+    ids.forEach((id) => setResult(id, 'done'))
+  }
+
   // 取り込んだ日時を記録する（週初めのお知らせを出すかどうかに使う）
   function recordImport() {
     const at = new Date().toISOString()
@@ -188,6 +193,7 @@ function App() {
             onAdd={openAddForm}
             onShowTimeline={() => changeView('timeline')}
             reminder={reminder}
+            onCompleteTasks={completeTasks}
             autoImportResult={autoImport.result}
             onDismissAutoImport={autoImport.dismiss}
           />
@@ -216,7 +222,13 @@ function App() {
           />
         )}
         {view === 'import' && (
-          <ImportView tasks={tasks} lastImport={lastImport} now={now} onImport={handleImport} />
+          <ImportView
+            tasks={tasks}
+            lastImport={lastImport}
+            now={now}
+            onImport={handleImport}
+            onCompleteTasks={completeTasks}
+          />
         )}
       </main>
 
