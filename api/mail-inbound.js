@@ -47,6 +47,11 @@ export default async function handler(req, res) {
     const receivedAt = new Date().toISOString()
     const found = parseSubmissionMail(text).map((s) => ({ ...s, receivedAt }))
     await addSubmissions(found)
+    // うまく読み取れなかったときに原因を調べるための記録（本文そのものは残さない）
+    console.log(
+      `mail-inbound: found=${found.length} plain=${(mail.plain ?? '').length} html=${(mail.html ?? '').length}` +
+        ` 提出文=${text.includes('への提出を送信')} 課題行=${/->\s*課題/.test(text)}`,
+    )
     return send(res, 200, { found: found.length })
   } catch (error) {
     return send(res, 500, { error: error.message })

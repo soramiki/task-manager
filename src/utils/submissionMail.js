@@ -7,6 +7,7 @@
 // ・1行目から「科目名」と「課題名」を読む（科目名の後ろの授業コードは取る）
 // ・1行目がなくても、「あなたは課題「〇〇」への提出を送信しました」から課題名だけは読む
 // ・何通か分をまとめて貼り付けても、全部読む
+// ・Outlook で転送したときの、行の頭の「>」や、長い行の途中での折り返しがあっても読む
 
 // 「科目名 (授業コード) ->課題 ->課題名」の行
 const HEADER = /^(.+?)\s*\(([^()\n]+)\)\s*->\s*課題\s*->\s*(.+?)\s*$/gm
@@ -19,7 +20,11 @@ export function normalize(text) {
 }
 
 // 戻り値：[{ subject: 科目名（分からなければ null）, title: 課題名 }]（同じものは1つにまとめる）
-export function parseSubmissionMail(text) {
+export function parseSubmissionMail(rawText) {
+  // 転送・返信で行の頭に付く「>」を取る
+  const text = rawText.replace(/\r\n?/g, '\n').replace(/^[ \t]*(?:>[ \t]?)+/gm, '')
+  // 文の途中で折り返されていても読めるように、改行を取ったもの（日本語の文は改行を取ってもつながる）
+  const flatText = text.replace(/\n/g, '')
   const found = []
   const seen = new Set()
   const add = (subject, title) => {
@@ -36,7 +41,7 @@ export function parseSubmissionMail(text) {
     titlesWithSubject.add(normalize(m[3]))
   }
   // 2. 科目名がない文（1で読めなかった課題だけ）
-  for (const m of text.matchAll(SENTENCE)) {
+  for (const m of flatText.matchAll(SENTENCE)) {
     if (!titlesWithSubject.has(normalize(m[1]))) add(null, m[1].trim())
   }
   return found
