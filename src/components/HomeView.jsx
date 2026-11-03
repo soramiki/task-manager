@@ -1,6 +1,7 @@
 import { formatDate } from '../utils/date.js'
 import { getMissedCountBySubject } from '../utils/missedStats.js'
 import { AutoImportNotice } from './AutoImportNotice.jsx'
+import { SubmissionSyncNotice } from './SubmissionSyncNotice.jsx'
 import { ImportReminder } from './ImportReminder.jsx'
 import { MissedStatsButton } from './MissedStats.jsx'
 import { SubmissionMailButton } from './SubmissionMail.jsx'
@@ -21,9 +22,16 @@ export function HomeView({
   autoImportResult, // 自動で取り込んだ内容（なければ null）
   onDismissAutoImport,
   onCompleteTasks, // 提出メールから、まとめて完了にする
+  submissionSyncCompleted, // 提出メールの自動連携で完了にした課題（なければ null）
+  onDismissSubmissionSync,
 }) {
-  const autoNotice = autoImportResult && (
-    <AutoImportNotice result={autoImportResult} onDismiss={onDismissAutoImport} />
+  const autoNotice = (
+    <>
+      {submissionSyncCompleted && (
+        <SubmissionSyncNotice tasks={submissionSyncCompleted} onDismiss={onDismissSubmissionSync} />
+      )}
+      {autoImportResult && <AutoImportNotice result={autoImportResult} onDismiss={onDismissAutoImport} />}
+    </>
   )
 
   if (tasks.length === 0) {

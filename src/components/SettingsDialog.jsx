@@ -9,6 +9,7 @@ import { isAutoImportEnabled, setAutoImportEnabled } from '../utils/autoImport.j
 import { COLOR_NAMES, COLORS } from '../utils/subjectColors.js'
 import { BackupSettings } from './BackupSettings.jsx'
 import { HowToUse } from './HowToUse.jsx'
+import { MailSyncSettings } from './MailSyncSettings.jsx'
 import { NotificationSettings } from './NotificationSettings.jsx'
 
 // 設定（右上の ⚙ から開く小窓）
@@ -46,6 +47,7 @@ export function SettingsDialog({ tasks, onRestore, subjects, colorIndexes, onCha
         />
         <NotificationSettings />
         <CalendarUrlSettings />
+        <MailSyncSettings />
         <BackupSettings tasks={tasks} onRestore={onRestore} />
         <HowToUse />
       </div>

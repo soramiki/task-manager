@@ -1235,6 +1235,10 @@ select {
   color: var(--text-sub);
 }
 
+.auto-import--done {
+  border-color: var(--start-text);
+}
+
 /* 設定のオン・オフ */
 .settings-toggle {
   display: flex;

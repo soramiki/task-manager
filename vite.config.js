@@ -3,6 +3,8 @@ import { defineConfig, loadEnv } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import cronDaily from './api/cron-daily.js'
 import letusCalendar from './api/letus-calendar.js'
+import mailInbound from './api/mail-inbound.js'
+import mailSubmissions from './api/mail-submissions.js'
 import pushPublicKey from './api/push-public-key.js'
 import pushSubscribe from './api/push-subscribe.js'
 import pushTest from './api/push-test.js'
@@ -16,6 +18,8 @@ const API_ROUTES = {
   'push-unsubscribe': pushUnsubscribe,
   'push-test': pushTest,
   'cron-daily': cronDaily,
+  'mail-inbound': mailInbound,
+  'mail-submissions': mailSubmissions,
 }
 
 const localApi = {

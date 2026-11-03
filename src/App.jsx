@@ -8,6 +8,7 @@ import { TaskForm } from './components/TaskForm.jsx'
 import { TimelineView } from './components/TimelineView.jsx'
 import { useAutoImport } from './hooks/useAutoImport.js'
 import { useNow } from './hooks/useNow.js'
+import { useSubmissionSync } from './hooks/useSubmissionSync.js'
 import { useSubjectColors } from './hooks/useSubjectColors.js'
 import { useTasks } from './hooks/useTasks.js'
 import { DEFAULT_CONDITIONS } from './utils/filterTasks.js'
@@ -95,6 +96,9 @@ function App() {
   function completeTasks(ids) {
     ids.forEach((id) => setResult(id, 'done'))
   }
+
+  // 提出メールの自動連携：届いた提出の課題を、開いたときに自動で「完了」にする
+  const submissionSync = useSubmissionSync({ tasks, completeTasks })
 
   // 取り込んだ日時を記録する（週初めのお知らせを出すかどうかに使う）
   function recordImport() {
@@ -194,6 +198,8 @@ function App() {
             onShowTimeline={() => changeView('timeline')}
             reminder={reminder}
             onCompleteTasks={completeTasks}
+            submissionSyncCompleted={submissionSync.completed}
+            onDismissSubmissionSync={submissionSync.dismiss}
             autoImportResult={autoImport.result}
             onDismissAutoImport={autoImport.dismiss}
           />
